@@ -1,0 +1,6 @@
+@Taskio.Api_HostAddress = http://localhost:5276
+
+GET {{Taskio.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
