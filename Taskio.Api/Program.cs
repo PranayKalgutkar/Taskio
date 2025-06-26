@@ -7,10 +7,17 @@ using Taskio.Persist.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .SetBasePath(Path.Combine(builder.Environment.ContentRootPath, "Taskio.Api"))
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
 builder.Services.AddControllers(); // Add this line to register controllers
 // Register EF Core with PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("TaskioCon")));
+
 
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();           // App Service
