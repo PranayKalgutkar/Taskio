@@ -44,7 +44,7 @@ namespace Taskio.Tests.Services
             await _userService.SignUp(dto);
 
             // Assert
-            _userRepoMock.Verify(r => r.AddUser(It.Is<User>(u => u.Email == dto.Email && u.Name == dto.Name)), Times.Once);
+            _userRepoMock.Verify(r => r.AddUser(It.Is<User>(u => u.Email == dto.Email && u.FullName == dto.Name)), Times.Once);
             _emailServiceMock.Verify(e => e.SendEmail(dto.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
