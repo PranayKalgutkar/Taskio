@@ -35,17 +35,25 @@ namespace Taskio.Tests.Services
         {
             // Arrange
             var dto = new UserSignupDto { Name = "John Doe", Email = "john@example.com" };
+
             _userRepoMock.Setup(r => r.IsEmailExists(dto.Email)).ReturnsAsync(false);
-            _userRepoMock.Setup(r => r.AddUser(It.IsAny<User>())).Returns(Task.CompletedTask);
+            _userRepoMock.Setup(r => r.AddUser(It.IsAny<User>())).ReturnsAsync(true); // ✅ This line fixed
             _emailServiceMock.Setup(e => e.SendEmail(dto.Email, It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task.CompletedTask);
+                             .Returns(Task.CompletedTask);
 
             // Act
-            await _userService.SignUp(dto);
+            var result = await _userService.SignUp(dto);
 
             // Assert
             _userRepoMock.Verify(r => r.AddUser(It.Is<User>(u => u.Email == dto.Email && u.FullName == dto.Name)), Times.Once);
             _emailServiceMock.Verify(e => e.SendEmail(dto.Email, It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            // Assert.NotNull(result);
+            // Assert.Equal(dto.Email, result.Email);
+            Assert.IsType<UserSignupDto>(result);
+            var userDto = (UserSignupDto)result;
+            Assert.Equal(dto.Email, userDto.Email);
+
         }
     }
 }

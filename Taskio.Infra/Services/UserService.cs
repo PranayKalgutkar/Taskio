@@ -16,15 +16,32 @@ namespace Taskio.Infra.Services
             _emailService = emailService;
         }
 
-        public async Task SignUp(UserSignupDto dto)
+        public async Task<object> SignUp(UserSignupDto dto)
         {
             if (await _userRepository.IsEmailExists(dto.Email))
-                throw new Exception("Email already exists");
+                return "User with this email already exists.";
 
-            var user = new User { FullName = dto.Name, Email = dto.Email, PasswordHash = dto.PasswordHash };
+            var user = new User
+            {
+                FullName = dto.Name,
+                Email = dto.Email,
+                PasswordHash = dto.PasswordHash,
+                UserRole = "User"
+            };
 
-            await _userRepository.AddUser(user);
-            await _emailService.SendEmail(user.Email, "Welcome", "Thanks for signing up!");
+            var isSaved = await _userRepository.AddUser(user);
+
+            if (isSaved)
+            {
+                return new UserSignupDto
+                {
+                    Name = user.FullName,
+                    Email = user.Email,
+                    PasswordHash = "NA",
+                    UserRole = user.UserRole
+                };
+            }
+            return "Failed to create user.";
         }
     }
 }

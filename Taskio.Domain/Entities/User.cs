@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Taskio.Domain.Entities
 {
-    [Table("tbluser")]
+    [Table("tbl_user")]
 public class User
 {
     [Key]

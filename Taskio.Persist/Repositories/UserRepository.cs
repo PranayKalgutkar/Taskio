@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Taskio.App.DTOs;
 using Taskio.App.IRepository;
 using Taskio.Domain.Entities;
 
@@ -13,10 +14,11 @@ namespace Taskio.Persist.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task AddUser(User user)
+        public async Task<bool> AddUser(User user)
         {
             _dbContext.Users.Add(user);
-            await _dbContext.SaveChangesAsync();
+            bool isSaved = await _dbContext.SaveChangesAsync() > 0;
+            return isSaved;
         }
 
         public async Task<bool> IsEmailExists(string email)
