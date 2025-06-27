@@ -16,7 +16,7 @@
             "program": "${workspaceFolder}/Taskio.Api/bin/Debug/net8.0/Taskio.Api.dll",
 
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/Taskio.Api",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
